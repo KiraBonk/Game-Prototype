@@ -4,6 +4,8 @@ const c = canvas.getContext("2d");
 canvas.width = 832;
 canvas.height = 480;
 
+const gravity = 0.1;
+
 const collisionsMap = [];
 for (let i = 0; i < collisions.length; i += 26) {
   collisionsMap.push(collisions.slice(i, 70 + i));
@@ -45,9 +47,6 @@ collisionsMap.forEach((row, i) => {
   });
 });
 
-c.fillStyle = "gray";
-c.fillRect(0, 0, canvas.width, canvas.height);
-
 const image = new Image();
 image.src = "./img/testLevel.png";
 
@@ -59,6 +58,7 @@ class Sprite {
     this.position = position;
     this.image = image;
     this.frames = frames;
+    this.velocity = velocity;
     this.image.onload = () => {
       this.width = this.image.width / this.frames.max;
       this.height = this.image.height;
@@ -78,12 +78,23 @@ class Sprite {
       this.image.height
     );
   }
+
+  update() {
+    this.position.y += this.velocity.y;
+    this.draw();
+
+    this.velocity.y += gravity;
+  }
 }
 
 const player = new Sprite({
   position: {
     x: 75,
-    y: 375,
+    y: 200,
+  },
+  velocity: {
+    x: 0,
+    y: 0,
   },
   image: playerImage,
   frames: {
@@ -133,103 +144,103 @@ function animate() {
     boundary.draw();
   });
 
-  player.draw();
+  player.update();
 
-  let moving = true;
+  // let moving = true;
 
-  if (keys.d.pressed && lastKey === "d") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x - 2,
-              y: boundary.position.y,
-            },
-          },
-        })
-      ) {
-        moving = false;
-        break;
-      }
-    }
-    if (moving)
-      movables.forEach((movable) => {
-        movable.position.x -= 2;
-      });
-  } else if (keys.a.pressed && lastKey === "a") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x + 2,
-              y: boundary.position.y,
-            },
-          },
-        })
-      ) {
-        moving = false;
-        break;
-      }
-    }
-    if (moving)
-      movables.forEach((movable) => {
-        movable.position.x += 2;
-      });
-  } else if (keys.w.pressed && lastKey === "w") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x,
-              y: boundary.position.y + 2,
-            },
-          },
-        })
-      ) {
-        moving = false;
-        break;
-      }
-    }
-    if (moving)
-      movables.forEach((movable) => {
-        movable.position.y += 2;
-      });
-  } else if (keys.s.pressed && lastKey === "s") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        rectangularCollision({
-          rectangle1: player,
-          rectangle2: {
-            ...boundary,
-            position: {
-              x: boundary.position.x,
-              y: boundary.position.y - 2,
-            },
-          },
-        })
-      ) {
-        moving = false;
-        break;
-      }
-    }
-    if (moving)
-      movables.forEach((movable) => {
-        movable.position.y -= 2;
-      });
-  }
+  // if (keys.d.pressed && lastKey === "d") {
+  //   for (let i = 0; i < boundaries.length; i++) {
+  //     const boundary = boundaries[i];
+  //     if (
+  //       rectangularCollision({
+  //         rectangle1: player,
+  //         rectangle2: {
+  //           ...boundary,
+  //           position: {
+  //             x: boundary.position.x - 2,
+  //             y: boundary.position.y,
+  //           },
+  //         },
+  //       })
+  //     ) {
+  //       moving = false;
+  //       break;
+  //     }
+  //   }
+  //   if (moving)
+  //     movables.forEach((movable) => {
+  //       movable.position.x -= 2;
+  //     });
+  // } else if (keys.a.pressed && lastKey === "a") {
+  //   for (let i = 0; i < boundaries.length; i++) {
+  //     const boundary = boundaries[i];
+  //     if (
+  //       rectangularCollision({
+  //         rectangle1: player,
+  //         rectangle2: {
+  //           ...boundary,
+  //           position: {
+  //             x: boundary.position.x + 2,
+  //             y: boundary.position.y,
+  //           },
+  //         },
+  //       })
+  //     ) {
+  //       moving = false;
+  //       break;
+  //     }
+  //   }
+  //   if (moving)
+  //     movables.forEach((movable) => {
+  //       movable.position.x += 2;
+  //     });
+  // } else if (keys.w.pressed && lastKey === "w") {
+  //   for (let i = 0; i < boundaries.length; i++) {
+  //     const boundary = boundaries[i];
+  //     if (
+  //       rectangularCollision({
+  //         rectangle1: player,
+  //         rectangle2: {
+  //           ...boundary,
+  //           position: {
+  //             x: boundary.position.x,
+  //             y: boundary.position.y + 2,
+  //           },
+  //         },
+  //       })
+  //     ) {
+  //       moving = false;
+  //       break;
+  //     }
+  //   }
+  //   if (moving)
+  //     movables.forEach((movable) => {
+  //       movable.position.y += 2;
+  //     });
+  // } else if (keys.s.pressed && lastKey === "s") {
+  //   for (let i = 0; i < boundaries.length; i++) {
+  //     const boundary = boundaries[i];
+  //     if (
+  //       rectangularCollision({
+  //         rectangle1: player,
+  //         rectangle2: {
+  //           ...boundary,
+  //           position: {
+  //             x: boundary.position.x,
+  //             y: boundary.position.y - 2,
+  //           },
+  //         },
+  //       })
+  //     ) {
+  //       moving = false;
+  //       break;
+  //     }
+  //   }
+  //   if (moving)
+  //     movables.forEach((movable) => {
+  //       movable.position.y -= 2;
+  //     });
+  // }
 }
 
 animate();
