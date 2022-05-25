@@ -103,6 +103,9 @@ const keys = {
   w: {
     pressed: false,
   },
+  s: {
+    pressed: false,
+  },
   a: {
     pressed: false,
   },
@@ -180,6 +183,52 @@ function animate() {
       movables.forEach((movable) => {
         movable.position.x += 2;
       });
+  } else if (keys.w.pressed && lastKey === "w") {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        rectangularCollision({
+          rectangle1: player,
+          rectangle2: {
+            ...boundary,
+            position: {
+              x: boundary.position.x,
+              y: boundary.position.y + 2,
+            },
+          },
+        })
+      ) {
+        moving = false;
+        break;
+      }
+    }
+    if (moving)
+      movables.forEach((movable) => {
+        movable.position.y += 2;
+      });
+  } else if (keys.s.pressed && lastKey === "s") {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        rectangularCollision({
+          rectangle1: player,
+          rectangle2: {
+            ...boundary,
+            position: {
+              x: boundary.position.x,
+              y: boundary.position.y - 2,
+            },
+          },
+        })
+      ) {
+        moving = false;
+        break;
+      }
+    }
+    if (moving)
+      movables.forEach((movable) => {
+        movable.position.y -= 2;
+      });
   }
 }
 
@@ -191,6 +240,10 @@ window.addEventListener("keydown", (e) => {
     case "w":
       keys.w.pressed = true;
       lastKey = "w";
+      break;
+    case "s":
+      keys.s.pressed = true;
+      lastKey = "s";
       break;
     case "a":
       keys.a.pressed = true;
