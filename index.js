@@ -91,7 +91,7 @@ class Sprite {
 
 const player = new Sprite({
   position: {
-    x: 75,
+    x: 416,
     y: 200,
   },
   velocity: {
@@ -125,12 +125,18 @@ const movables = [background, ...boundaries];
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
-    rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-    rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-    rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-    rectangle1.position.y + rectangle1.height >= rectangle2.position.y &&
+    // rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+    // rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+    // rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+    // rectangle1.position.y + rectangle1.height >= rectangle2.position.y &&
+    // rectangle1.position.y + rectangle1.height + rectangle1.velocity.y >=
+    //   rectangle2.position.y
+
+    rectangle1.position.y + rectangle1.height <= rectangle2.position.y &&
     rectangle1.position.y + rectangle1.height + rectangle1.velocity.y >=
-      rectangle2.position.y
+      rectangle2.position.y &&
+    rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+    rectangle1.position.x <= rectangle2.position.x + rectangle2.width
   );
 }
 
@@ -143,16 +149,35 @@ function animate() {
 
     if (rectangularCollision({ rectangle1: player, rectangle2: boundary })) {
       player.velocity.y = 0;
+      // console.log("colliding");
     }
   });
 
-  // player.velocity.x = 0;
+  if (keys.a.pressed && lastKey === "a" && player.position.x > 366) {
+    player.velocity.x = -1.5;
+  } else if (keys.d.pressed && lastKey === "d" && player.position.x < 466) {
+    player.velocity.x = 1.5;
+  } else {
+    player.velocity.x = 0;
 
-  // if (keys.a.pressed) {
-  //   player.velocity.x = -2;
-  // } else if (keys.d.pressed) {
-  //   player.velocity.x = 2;
-  // }
+    if (keys.d.pressed) {
+      movables.forEach((movable) => {
+        movable.position.x -= 1.5;
+      });
+    } else if (keys.a.pressed) {
+      movables.forEach((movable) => {
+        movable.position.x += 1.5;
+      });
+    // } else if (player.position.y < 180) {
+    //   movables.forEach((movable) => {
+    //     movable.position.y += 0.5;
+    //   });
+    // } else if (player.position.y > 400) {
+    //   movables.forEach((movable) => {
+    //     movable.position.y -= 0.5;
+    //   });
+    }
+  }
 
   player.update();
 
@@ -252,20 +277,12 @@ function animate() {
   //       movable.position.y -= 2;
   //     });
   // }
-
-  player.velocity.x = 0;
-
-  if (keys.a.pressed) {
-    player.velocity.x = -2;
-  } else if (keys.d.pressed) {
-    player.velocity.x = 2;
-  }
 }
 
 animate();
 
 let lastKey = "";
-console.log(lastKey);
+
 window.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "w":
