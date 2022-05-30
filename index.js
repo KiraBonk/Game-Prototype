@@ -92,7 +92,7 @@ class Sprite {
 const player = new Sprite({
   position: {
     x: 416,
-    y: 200,
+    y: 300,
   },
   velocity: {
     x: 0,
@@ -153,6 +153,10 @@ function animate() {
     }
   });
 
+  movables.forEach((movable) => {
+    movable.position.y -= player.velocity.y / 10;
+  });
+
   if (keys.a.pressed && lastKey === "a" && player.position.x > 366) {
     player.velocity.x = -1.5;
   } else if (keys.d.pressed && lastKey === "d" && player.position.x < 466) {
@@ -168,14 +172,14 @@ function animate() {
       movables.forEach((movable) => {
         movable.position.x += 1.5;
       });
-    // } else if (player.position.y < 180) {
-    //   movables.forEach((movable) => {
-    //     movable.position.y += 0.5;
-    //   });
-    // } else if (player.position.y > 400) {
-    //   movables.forEach((movable) => {
-    //     movable.position.y -= 0.5;
-    //   });
+      // } else if (player.position.y < 180) {
+      //   movables.forEach((movable) => {
+      //     movable.position.y += 0.5;
+      //   });
+      // } else if (player.position.y > 400) {
+      //   movables.forEach((movable) => {
+      //     movable.position.y -= 0.5;
+      //   });
     }
   }
 
@@ -287,6 +291,10 @@ window.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "w":
       player.velocity.y += -5;
+      // movables.forEach((movable) => {
+      //   movable.position.y += player.velocity.y + gravity;
+      // });
+      console.log(player.velocity.y);
       // console.log("w");
       break;
     case "a":
