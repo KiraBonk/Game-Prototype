@@ -5,6 +5,7 @@ canvas.width = 832;
 canvas.height = 480;
 
 const gravity = 0.1;
+// let jumping = true;
 
 const collisionsMap = [];
 for (let i = 0; i < collisions.length; i += 26) {
@@ -149,7 +150,9 @@ function animate() {
 
     if (rectangularCollision({ rectangle1: player, rectangle2: boundary })) {
       player.velocity.y = 0;
+      jumping = false;
       // console.log("colliding");
+      console.log(jumping);
     }
   });
 
@@ -290,7 +293,11 @@ let lastKey = "";
 window.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "w":
-      player.velocity.y += -5;
+      if (!jumping) {
+        player.velocity.y += -5;
+        jumping = true;
+      }
+
       // movables.forEach((movable) => {
       //   movable.position.y += player.velocity.y + gravity;
       // });
