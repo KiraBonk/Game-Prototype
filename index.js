@@ -41,7 +41,7 @@ playerImage.src = "./img/playerDown.png";
 const player = new Sprite({
   position: {
     x: 300,
-    y: 300,
+    y: 315,
   },
   velocity: {
     x: 0,
@@ -82,13 +82,19 @@ function animate() {
     if (rectangularCollision({ rectangle1: player, rectangle2: boundary })) {
       player.velocity.y = 0;
       jumping = false;
-      // console.log('colliding')
     }
   });
 
-  movables.forEach((movable) => {
-    movable.position.y -= player.velocity.y / 11;
-  });
+  if (player.position.y < 100 && player.velocity.y < 0) {
+    movables.forEach((movable) => {
+      movable.position.y += 1.5;
+    });
+  } else if (player.position.y + player.height > 400 && player.velocity.y > 0) {
+    movables.forEach((movable) => {
+      movable.position.y -= 2;
+      player.position.y -= 0.06;
+    });
+  }
 
   if (keys.a.pressed && lastKey === "a" && player.position.x > 366) {
     player.velocity.x = -1.5;
