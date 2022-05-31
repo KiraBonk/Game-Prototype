@@ -7,15 +7,15 @@ canvas.height = 480;
 const gravity = 0.1;
 
 const collisionsMap = [];
-for (let i = 0; i < collisions.length; i += 50) {
-  collisionsMap.push(collisions.slice(i, 50 + i));
+for (let i = 0; i < collisions.length; i += 100) {
+  collisionsMap.push(collisions.slice(i, 100 + i));
 }
 
 const boundaries = [];
 
 const offset = {
   x: 0,
-  y: 0,
+  y: -500,
 };
 
 collisionsMap.forEach((row, i) => {
@@ -33,7 +33,7 @@ collisionsMap.forEach((row, i) => {
 });
 
 const image = new Image();
-image.src = "./img/testLevel2.png";
+image.src = "./img/testLevel3.2.png";
 
 const playerImage = new Image();
 playerImage.src = "./img/playerDown.png";
@@ -41,7 +41,7 @@ playerImage.src = "./img/playerDown.png";
 const player = new Sprite({
   position: {
     x: 300,
-    y: 315,
+    y: 327,
   },
   velocity: {
     x: 0,
@@ -85,14 +85,14 @@ function animate() {
     }
   });
 
-  if (player.position.y < 100 && player.velocity.y < 0) {
+  if (player.position.y < 250 && player.velocity.y < 0) {
     movables.forEach((movable) => {
       movable.position.y += 1.5;
     });
-  } else if (player.position.y + player.height > 400 && player.velocity.y > 0) {
+  } else if (player.position.y + player.height > 350 && player.velocity.y > 0) {
     movables.forEach((movable) => {
-      movable.position.y -= 2;
-      player.position.y -= 0.06;
+      movable.position.y -= 1.5;
+      player.position.y -= 0.009;
     });
   }
 
