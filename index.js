@@ -117,7 +117,7 @@ function animate() {
   player.update();
 }
 
-animate();
+// animate();
 
 let lastKey = "";
 
@@ -153,3 +153,5 @@ window.addEventListener("keyup", (e) => {
       break;
   }
 });
+
+animate();
